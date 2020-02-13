@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19C57" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="BasketProductTable" representedClassName="BasketProductTable" isAbstract="YES" syncable="YES" codeGenerationType="class">
+        <attribute name="eanCode" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="productRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ProductTable" inverseName="basketProductTable" inverseEntity="ProductTable"/>
+    </entity>
+    <entity name="CategoryTable" representedClassName="CategoryTable" isAbstract="YES" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryName" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="nameEN" optional="YES" attributeType="String"/>
+        <attribute name="picture" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="pictureEmoji" optional="YES" attributeType="String"/>
+        <attribute name="selectedCategory" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="products" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ProductTable" inverseName="parentCategory" inverseEntity="ProductTable"/>
+    </entity>
+    <entity name="FavoriteContactsTable" representedClassName="FavoriteContactsTable" isAbstract="YES" syncable="YES" codeGenerationType="class">
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="image" optional="YES" attributeType="Binary"/>
+        <attribute name="key" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="phone" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="PreferedContacts" representedClassName="PreferedContacts" isAbstract="YES" syncable="YES" codeGenerationType="class">
+        <attribute name="emai" optional="YES" attributeType="String"/>
+        <attribute name="fullContactName" optional="YES" attributeType="String"/>
+        <attribute name="phoneNumber" optional="YES" attributeType="String"/>
+        <attribute name="picture" optional="YES" attributeType="Binary"/>
+    </entity>
+    <entity name="ProductTable" representedClassName="ProductTable" isAbstract="YES" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="changeDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="checked1" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="checked2" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="eanCode" optional="YES" attributeType="String"/>
+        <attribute name="fullPicture" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="multiChecked" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="number1" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="number2" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="number3" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pictureName" optional="YES" attributeType="String"/>
+        <attribute name="producent" optional="YES" attributeType="String"/>
+        <attribute name="productName" optional="YES" attributeType="String"/>
+        <attribute name="searchTag" optional="YES" attributeType="String"/>
+        <attribute name="smallPicture" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="weight" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="basketProductTable" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BasketProductTable" inverseName="productRelation" inverseEntity="BasketProductTable"/>
+        <relationship name="parentCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="CategoryTable" inverseName="products" inverseEntity="CategoryTable"/>
+        <relationship name="shopingProductRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ShopingProductTable" inverseName="productRelation" inverseEntity="ShopingProductTable"/>
+        <relationship name="toShopRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ToShopProductTable" inverseName="productRelation" inverseEntity="ToShopProductTable"/>
+    </entity>
+    <entity name="ShopingProductTable" representedClassName="ShopingProductTable" isAbstract="YES" syncable="YES" codeGenerationType="class">
+        <attribute name="eanCode" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="productRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ProductTable" inverseName="shopingProductRelation" inverseEntity="ProductTable"/>
+    </entity>
+    <entity name="ToShopProductTable" representedClassName="ToShopProductTable" isAbstract="YES" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryId" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="changeDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="checked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="eanCode" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="productRelation" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ProductTable" inverseName="toShopRelation" inverseEntity="ProductTable"/>
+    </entity>
+    <entity name="UsersTable" representedClassName="UsersTable" isAbstract="YES" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="userEmail" optional="YES" attributeType="String"/>
+        <attribute name="userName" optional="YES" attributeType="String"/>
+        <attribute name="userPhoneNumber" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="BasketProductTable" positionX="-277.06640625" positionY="-16.4921875" width="128" height="88"/>
+        <element name="CategoryTable" positionX="-251.7265625" positionY="-182.3828125" width="128" height="148"/>
+        <element name="PreferedContacts" positionX="-621" positionY="-36" width="128" height="103"/>
+        <element name="ProductTable" positionX="-63" positionY="-18" width="128" height="373"/>
+        <element name="ShopingProductTable" positionX="-521.12109375" positionY="72.01953125" width="128" height="88"/>
+        <element name="ToShopProductTable" positionX="-291.75" positionY="198.96875" width="128" height="133"/>
+        <element name="UsersTable" positionX="-823.21875" positionY="185.390625" width="128" height="103"/>
+        <element name="FavoriteContactsTable" positionX="-621" positionY="-36" width="128" height="133"/>
+    </elements>
+</model>
