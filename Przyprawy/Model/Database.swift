@@ -169,6 +169,9 @@ class Database  {
 //        Database.
 //        let type = type(of: myClass)
     }
+    func storeDatabaseToWeb() {
+        
+    }
 
     func getParam(tableArrayWith dbName: DbTableNames) -> [AnyObject] {
         

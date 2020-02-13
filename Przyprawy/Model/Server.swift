@@ -102,10 +102,10 @@ class Server {
         return todaysDate
     }
 //-----------------------
-func xxxxxx() -> String{
+    func xxxxxx() -> String{
     let sqlText = "CREATE TABLE `persons7` (`Personid` int(11) NOT NULL, `LastName` varchar(255) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL, `FirstName` varchar(255) CHARACTER SET utf8 COLLATE utf8_polish_ci DEFAULT NULL, `Age` int(11) DEFAULT NULL );"
     return sqlText
-}
+    }
     func sqlExec(forId id: String, sqlText: String)  {
     //let parameters: [String: String] = ["firstName": "nametextField.text", "lastName": "passwordTextField.text"]
     let configuration=URLSessionConfiguration.default
