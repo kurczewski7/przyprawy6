@@ -62,7 +62,7 @@ class ToShopTableViewCtr:   UIViewController, UITableViewDataSource, UITableView
           print("ind: \(sectionInfo.indexTitle ?? "brak")")
           print("name: \(sectionInfo.name)")
           print("obj: \(sectionInfo.numberOfObjects)")
-          print("count: \(sectionInfo.objects?.count ?? -1)")
+          print("count : \(sectionInfo.objects?.count ?? -1)")
 
           return fetchedResultsController.sections?.count ?? 1
       }
