@@ -170,7 +170,9 @@ class Database  {
 //        let type = type(of: myClass)
     }
     func storeDatabaseToWeb() {
-        
+        //server.insert(id: T##String, firstName: T##String, lastName: T##String)
+        let sqltxt = server.makeSqlTxt(database: self)
+        print(sqltxt)
     }
 
     func getParam(tableArrayWith dbName: DbTableNames) -> [AnyObject] {

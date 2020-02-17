@@ -83,9 +83,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
+        print("----SQL-------")
+        database.storeDatabaseToWeb()
+        print("---- end SQL -------")
         // Override point for customization after application launch.
+       
         aboutSwiftVersion()
-        
+       
         Setup.currentLanguage = .polish
 //        Setup.currentLanguage = .enlish
 //        Setup.currentLanguage = .german

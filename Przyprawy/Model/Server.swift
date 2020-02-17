@@ -16,41 +16,45 @@ class Server {
     var url: URL? = nil
     var urlRequest:URLRequest? = nil
     var task: URLSession? = nil
-
-    func makeSqlTxt(database db : Database) -> String  {
     
-//        CREATE TABLE `product_table` (
-//            `categoryId` int(10) DEFAULT NULL,
-//            `changeDate` date NOT NULL,
-//            `checked` tinyint(1) NOT NULL,
-//            `eanCode` text COLLATE utf8_polish_ci NOT NULL,
-//            `fullPicture` text COLLATE utf8_polish_ci NOT NULL,
-//            `id` int(10) NOT NULL,
-//            `number1` int(10) NOT NULL,
-//            `number2` int(10) NOT NULL,
-//            `number3` int(10) NOT NULL,
-//            `pictureName` text COLLATE utf8_polish_ci NOT NULL,
-//            `producent` text COLLATE utf8_polish_ci NOT NULL,
-//            `productName` text COLLATE utf8_polish_ci NOT NULL,
-//            `searchTag` text COLLATE utf8_polish_ci NOT NULL,
-//            `smallPicture` text COLLATE utf8_polish_ci NOT NULL,
-//            `weight` int(10) NOT NULL
-//        ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
-        
-        var isNumber: Bool = false 
+    func createTablePerson() -> String {
+        let sqlText = "CREATE TABLE `persons7` (`Personid` int(11) NOT NULL, `LastName` varchar(255) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL, `FirstName` varchar(255) CHARACTER SET utf8 COLLATE utf8_polish_ci DEFAULT NULL, `Age` int(11) DEFAULT NULL );"
+    return sqlText
+    }
+    func createTableProduct() -> String  {
+        let sqlText = """
+                CREATE TABLE `product_table` (
+                    `categoryId` int(10) DEFAULT NULL,
+                    `changeDate` date NOT NULL,
+                    `checked` tinyint(1) NOT NULL,
+                    `eanCode` text COLLATE utf8_polish_ci NOT NULL,
+                    `fullPicture` text COLLATE utf8_polish_ci NOT NULL,
+                    `id` int(10) NOT NULL,
+                    `number1` int(10) NOT NULL,
+                    `number2` int(10) NOT NULL,
+                    `number3` int(10) NOT NULL,
+                    `pictureName` text COLLATE utf8_polish_ci NOT NULL,
+                    `producent` text COLLATE utf8_polish_ci NOT NULL,
+                    `productName` text COLLATE utf8_polish_ci NOT NULL,
+                    `searchTag` text COLLATE utf8_polish_ci NOT NULL,
+                    `smallPicture` text COLLATE utf8_polish_ci NOT NULL,
+                    `weight` int(10) NOT NULL
+                ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+        """
+        return sqlText
+    }
+    func makeSqlTxt(database db : Database) -> String  {
+        var isNumber: Bool = false
         var tekst: String = ""
         var tx: [String] =  ["","","","","","","","","","","","","","","","","","",""]
         let integerFields: [Int] = [0, 2,  3,4,5,6,  9, 10, 11, 12, 18]
-
-//        tekst =  "INSERT INTO `dvds` (`filmId`, `title`, `filmDirector`, `actors`, `type`, `filmDescription`, `filmImageName`, `youtubeUrl`, `price`, `isLiked`) VALUES \n"
-        
         
         tekst = "INSERT INTO `product_table` (`categoryId`, `changeDate`, `checked1`,`checked2`,`eanCode`, `fullPicture`, `id`, `number1`, `number2`, `number3`, `pictureName`, `producent`, `productName`, `searchTag`, `smallPicture`, `weight`) VALUES\n"
         
         let dbArray = db.product.array
         for i in 0..<dbArray.count   {
             tx[0] = "\(dbArray[i].categoryId)"            
-            tx[1] =  getStringDate(forDate: dbArray[i].changeDate)                                           //"\(dbArray[i].changeDate ?? Date())"
+            tx[1] =  getStringDate(forDate: dbArray[i].changeDate)                           //"\(dbArray[i].changeDate ?? Date())"
             tx[2] = "\(dbArray[i].checked1)"
             tx[3] = "\(dbArray[i].checked2)"
             
@@ -89,169 +93,160 @@ class Server {
     }
     func getStringDate(forDate myDate: Date?) -> String {
         var date: Date!
-        if myDate == nil {
-            date = Date()
-        }
-        else {
-            date = myDate
-        }
+        date = (myDate == nil) ? Date() : myDate
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let todaysDate = dateFormatter.string(from: date)
-        print(todaysDate)
+        print("todaysDate:\(todaysDate)")
         return todaysDate
     }
 //-----------------------
-    func xxxxxx() -> String{
-    let sqlText = "CREATE TABLE `persons7` (`Personid` int(11) NOT NULL, `LastName` varchar(255) CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL, `FirstName` varchar(255) CHARACTER SET utf8 COLLATE utf8_polish_ci DEFAULT NULL, `Age` int(11) DEFAULT NULL );"
-    return sqlText
-    }
     func sqlExec(forId id: String, sqlText: String)  {
-    //let parameters: [String: String] = ["firstName": "nametextField.text", "lastName": "passwordTextField.text"]
-    let configuration=URLSessionConfiguration.default
-    let session=URLSession(configuration: configuration)
-    //let session2 = URLSession.shared
-    let url=URL(string: "\(httpProtocol)://http://skurczewski.myqnapcloud.com/testapi/start.php/sql/")!
-    var urlRequest=URLRequest(url: url)
-    
-    urlRequest.httpMethod="POST"
-    urlRequest.timeoutInterval = 60
-    
-    // let id = idNumberInsertTextView.text ?? "0"
-    //let sqlText =  sqlTextField.text ?? ""
-    print("\(sqlText)")
-    let keyValues = "id=\(id)&sqltext=\(sqlText)"
-    urlRequest.httpBody = keyValues.data(using: String.Encoding.utf8)
-    
-    let task = session.dataTask(with: urlRequest) { (data, response, error) in
-        guard let data = data, error == nil else { return }
+        //let parameters: [String: String] = ["firstName": "nametextField.text", "lastName": "passwordTextField.text"]
+        let configuration=URLSessionConfiguration.default
+        let session=URLSession(configuration: configuration)
+        //let session2 = URLSession.shared
+        let url=URL(string: "\(httpProtocol)://skurczewski.myqnapcloud.com/testapi/start.php/sql/")!
+        var urlRequest=URLRequest(url: url)
         
-        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-            print("statusCode should be 200, but is \(httpStatus.statusCode)")
-            print("response = \(String(describing: response))")
+        urlRequest.httpMethod="POST"
+        urlRequest.timeoutInterval = 60
+        
+        // let id = idNumberInsertTextView.text ?? "0"
+        //let sqlText =  sqlTextField.text ?? ""
+        print("\(sqlText)")
+        let keyValues = "id=\(id)&sqltext=\(sqlText)"
+        urlRequest.httpBody = keyValues.data(using: String.Encoding.utf8)
+        
+        let task = session.dataTask(with: urlRequest) { (data, response, error) in
+            guard let data = data, error == nil else { return }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(String(describing: response))")
+            }
+            do {
+                //create json object from data
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any]  {
+                    print(json)  }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+            print(NSString(data: data, encoding: String.Encoding.utf8.rawValue) ?? "default value")
         }
-        do {
-            //create json object from data
-            if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any]  {
-                print(json)  }
-        } catch let error {
-            print(error.localizedDescription)
-        }
-        print(NSString(data: data, encoding: String.Encoding.utf8.rawValue) ?? "default value")
+        task.resume()
     }
-    task.resume()
-}
     func insert(id:String, firstName: String, lastName: String) {
-    //  let parameters: [String: String] = ["firstName": "nametextField.text", "lastName": "passwordTextField.text"]
-    let configuration=URLSessionConfiguration.default
-    let session=URLSession(configuration: configuration)
-    //let session2 = URLSession.shared
-    let url=URL(string: "\(httpProtocol)://skurczewski.myqnapcloud.com/testapi/start.php/insert/test/")!
-    var urlRequest=URLRequest(url: url)
-    
-    urlRequest.httpMethod="POST"
-    urlRequest.timeoutInterval = 60
-    
-    print("\(firstName) \(lastName)")
-    
-    let keyValues = "id=\(id)&firstName=\(firstName)&lastName=\(lastName)"
-    urlRequest.httpBody = keyValues.data(using: String.Encoding.utf8)
-    
-    let task = session.dataTask(with: urlRequest) { (data, response, error) in
-        guard let data = data, error == nil else { return }
+        //  let parameters: [String: String] = ["firstName": "nametextField.text", "lastName": "passwordTextField.text"]
+        let configuration=URLSessionConfiguration.default
+        let session=URLSession(configuration: configuration)
+        //let session2 = URLSession.shared
+        let url=URL(string: "\(httpProtocol)://skurczewski.myqnapcloud.com/testapi/start.php/insert/test/")!
+        var urlRequest=URLRequest(url: url)
         
-        if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 { // check for http errors
-            print("statusCode should be 200, but is \(httpStatus.statusCode)")
-            print("response = \(String(describing: response))")
-        }
+        urlRequest.httpMethod="POST"
+        urlRequest.timeoutInterval = 60
         
-        do {
-            //create json object from data
-            if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any]  {
-                print(json)  }
-        } catch let error {
-            print(error.localizedDescription)
+        print("\(firstName) \(lastName)")
+        
+        let keyValues = "id=\(id)&firstName=\(firstName)&lastName=\(lastName)"
+        urlRequest.httpBody = keyValues.data(using: String.Encoding.utf8)
+        
+        let task = session.dataTask(with: urlRequest) { (data, response, error) in
+            guard let data = data, error == nil else { return }
+            
+            if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 { // check for http errors
+                print("statusCode should be 200, but is \(httpStatus.statusCode)")
+                print("response = \(String(describing: response))")
+            }
+            
+            do {
+                //create json object from data
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any]  {
+                    print(json)  }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+            print(NSString(data: data, encoding: String.Encoding.utf8.rawValue) ?? "default value")
         }
-        print(NSString(data: data, encoding: String.Encoding.utf8.rawValue) ?? "default value")
+        task.resume()
     }
-    task.resume()
-}
-func delete(idDeleteText: String)  {
-    let configuration=URLSessionConfiguration.default
-    let session=URLSession(configuration: configuration)
-    let fullUrlString = "\(httpProtocol)://skurczewski.myqnapcloud.com/testapi/start.php/delete/test//\(idDeleteText)"
-    let url = URL(string: fullUrlString)
-    var urlRequest = URLRequest(url: url!)
-    
-    urlRequest.httpMethod = "POST"
-    urlRequest.timeoutInterval = 60
-    let task = session.dataTask(with: urlRequest) { (data, response, error) in
-        guard let data = data, error == nil else { return }
-        print("data-------------")
-        print(NSString(data: data, encoding: String.Encoding.utf8.rawValue) ?? "default value")
-        print("end data-------------")        }
-    task.resume()
-}
+    func delete(idDeleteText: String)  {
+        let configuration=URLSessionConfiguration.default
+        let session=URLSession(configuration: configuration)
+        let fullUrlString = "\(httpProtocol)://skurczewski.myqnapcloud.com/testapi/start.php/delete/test//\(idDeleteText)"
+        let url = URL(string: fullUrlString)
+        var urlRequest = URLRequest(url: url!)
+        
+        urlRequest.httpMethod = "POST"
+        urlRequest.timeoutInterval = 60
+        let task = session.dataTask(with: urlRequest) { (data, response, error) in
+            guard let data = data, error == nil else { return }
+            print("data-------------")
+            print(NSString(data: data, encoding: String.Encoding.utf8.rawValue) ?? "default value")
+            print("end data-------------")        }
+        task.resume()
+    }
 
 //--------------------------
-    func xxxxx(urlString: String, fieldsValues: [String: String], images: [UIImage]?) {
-    //http://www.webpage.com/folder/start.php/upload/"destination folder"/"max picture size in kb"
-    let url = URL(string: "http://skurczewski.myqnapcloud.com/testapi/start.php/upload/pictures/900")!
-    let param = ["firstName":"Jan", "lastName":"Kobuszewski", "userId":"1967"]
-    let fileNames = ["user-profile1.jpg", "user-profile2.jpg"]
-    //let images = [imageView2.image!, imageView1.image!]
-    guard images != nil else {   return        }
-    imageUploadRequest(images: images!, uploadUrl: url, param: param, fileNames: fileNames)
+    func uploadUser(urlString: String, fieldsValues: [String: String], images: [UIImage]?) {
+        //http://www.webpage.com/folder/start.php/upload/"destination folder"/"max picture size in kb"
+        let url = URL(string: "http://skurczewski.myqnapcloud.com/testapi/start.php/upload/pictures/900")!
+        let param = ["firstName":"Jan", "lastName":"Kobuszewski", "userId":"1967"]
+        let fileNames = ["user-profile1.jpg", "user-profile2.jpg"]
+        //let images = [imageView2.image!, imageView1.image!]
+        guard images != nil else {   return        }
+        imageUploadRequest(images: images!, uploadUrl: url, param: param, fileNames: fileNames)
 }
-func imageUploadRequest(images: [UIImage], uploadUrl: URL, param: [String:String]?,  fileNames: [String], filePathKeys: String = "filesToUpload[]") {
-    // var imagesData: [UIImage] = [UIImage]()
-    let boundary = generateBoundaryString()
-    var request = URLRequest(url: uploadUrl)
-    
-    request.httpMethod = "POST"
-    request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-    request.httpBody = createBodyWithParameters(parameters: param, filePathKey: filePathKeys, images: images, boundary: boundary)
-    
-    //myActivityIndicator.startAnimating();
-    let task =  URLSession.shared.dataTask(with: request as URLRequest)
-    {
-        (data, response, error) -> Void in
-        if let myError = error {
-            print(myError.localizedDescription)
-            exit(0)
-        }
-        if let data = data {
-            // Print out reponse body
-            let responseString = String(data: data, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
-            print("response data = \(responseString!)")
-            ///let json =  try!JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary
-            //print("json value: \(String(describing: json)) end json")
-            //var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &err)
-            DispatchQueue.main.async () {
-                //self.myActivityIndicator.stopAnimating()
-                //self.imageView.image = nil;
+    func imageUploadRequest(images: [UIImage], uploadUrl: URL, param: [String:String]?,  fileNames: [String], filePathKeys: String = "filesToUpload[]") {
+        // var imagesData: [UIImage] = [UIImage]()
+        let boundary = generateBoundaryString()
+        var request = URLRequest(url: uploadUrl)
+        
+        request.httpMethod = "POST"
+        request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.httpBody = createBodyWithParameters(parameters: param, filePathKey: filePathKeys, images: images, boundary: boundary)
+        
+        //myActivityIndicator.startAnimating();
+        let task =  URLSession.shared.dataTask(with: request as URLRequest)
+        {
+            (data, response, error) -> Void in
+            if let myError = error {
+                print(myError.localizedDescription)
+                exit(0)
+            }
+            if let data = data {
+                // Print out reponse body
+                let responseString = String(data: data, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
+                print("response data = \(responseString!)")
+                ///let json =  try!JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? NSDictionary
+                //print("json value: \(String(describing: json)) end json")
+                //var json = NSJSONSerialization.JSONObjectWithData(data, options: .MutableContainers, error: &err)
+                DispatchQueue.main.async () {
+                    //self.myActivityIndicator.stopAnimating()
+                    //self.imageView.image = nil;
+                }
             }
         }
+        task.resume()
     }
-    task.resume()
-}
-func createBodyWithParameters(parameters: [String: String]?, filePathKey: String?, images: [UIImage], boundary: String, fileNames: [String] = ["picture.jpg","picture-min.jpg"]) -> Data {
-    let mimeType = "image/jpg"
-    var body = Data()
-    
-    if parameters != nil {
-        for (key, value) in parameters! {
-            body.appendString("--\(boundary)\r\n")
-            body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
-            body.appendString("\(value)\r\n")
+    func createBodyWithParameters(parameters: [String: String]?, filePathKey: String?, images: [UIImage], boundary: String, fileNames: [String] = ["picture.jpg","picture-min.jpg"]) -> Data {
+        let mimeType = "image/jpg"
+        var body = Data()
+        
+        if parameters != nil {
+            for (key, value) in parameters! {
+                body.appendString("--\(boundary)\r\n")
+                body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+                body.appendString("\(value)\r\n")
+            }
+            let imageDataKey: Data? = images[0].jpegData(compressionQuality: 1.0)
+            putPicture(&body, boundary: boundary, filePathKey: filePathKey, fileName: fileNames[0], mimeType: mimeType, imageDataKey: imageDataKey)
+            let imageDataKey2: Data? = images[1].jpegData(compressionQuality: 1.0)
+            putPicture(&body, boundary: boundary, filePathKey: filePathKey, fileName: fileNames[1], mimeType: mimeType, imageDataKey: imageDataKey2)
         }
-        let imageDataKey: Data? = images[0].jpegData(compressionQuality: 1.0)
-        putPicture(&body, boundary: boundary, filePathKey: filePathKey, fileName: fileNames[0], mimeType: mimeType, imageDataKey: imageDataKey)
-        let imageDataKey2: Data? = images[1].jpegData(compressionQuality: 1.0)
-        putPicture(&body, boundary: boundary, filePathKey: filePathKey, fileName: fileNames[1], mimeType: mimeType, imageDataKey: imageDataKey2)
+        return body
     }
-    return body
-}
 func putPicture(_ body: inout Data, boundary: String, filePathKey: String?, fileName: String, mimeType: String, imageDataKey: Data?) {
     if let imageData = imageDataKey {
         body.appendString("--\(boundary)\r\n")
